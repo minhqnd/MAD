@@ -1,4 +1,4 @@
-"""Expression tree toolkit for the MAD assignment."""
+"""Bộ công cụ xây cây biểu thức và đánh giá công thức cho bài tập MAD."""
 
 from .expression_tree import ExpressionTree, Node, build_expression_tree
 from .evaluator import (

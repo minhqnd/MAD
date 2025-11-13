@@ -1,4 +1,4 @@
-"""Command-line entry point for working with expression trees."""
+"""CLI quản lý cây biểu thức: dựng cây, duyệt và tính toán."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ DEFAULT_EXPRESSIONS = [
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
+    """Khởi tạo bộ phân tích tham số cho CLI."""
     parser = argparse.ArgumentParser(
         description="Build expression trees and display traversals.",
     )
@@ -30,11 +31,13 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
 
 
 def render_results(expression: str) -> str:
+    """Dựng cây cho một biểu thức cụ thể và trả về nội dung cần in."""
     tree = build_expression_tree(expression)
     prefix_tokens = tree.preorder()
     postfix_tokens = tree.postorder()
     prefix = " ".join(prefix_tokens)
     postfix = " ".join(postfix_tokens)
+    art = tree.render_ascii()
 
     def safe_eval(func, tokens: List[str]) -> str:
         try:
@@ -51,11 +54,14 @@ def render_results(expression: str) -> str:
         f"Postfix    : {postfix}",
         f"Prefix eval: {prefix_value}",
         f"Postfix eval: {postfix_value}",
+        "Tree:",
+        art,
     ]
     return "\n".join(lines)
 
 
 def main(argv: Iterable[str] | None = None) -> None:
+    """Điểm vào chính: đọc danh sách biểu thức và in kết quả."""
     args = parse_args(argv)
     expressions = args.expr if args.expr else DEFAULT_EXPRESSIONS
     for index, expr in enumerate(expressions, start=1):

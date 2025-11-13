@@ -1,4 +1,4 @@
-"""Evaluate prefix and postfix arithmetic expressions."""
+"""Tính giá trị biểu thức dạng prefix và postfix."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from .expression_tree import OPERATORS
 
 
 def _apply_operator(op: str, left: float, right: float) -> float:
+    """Thực hiện phép toán cơ bản dựa trên ký hiệu toán tử."""
     if op == "+":
         return left + right
     if op == "-":
@@ -24,6 +25,7 @@ def _apply_operator(op: str, left: float, right: float) -> float:
 
 
 def _coerce(token: str) -> float:
+    """Chuyển token chuỗi thành số thực, báo lỗi nếu không hợp lệ."""
     try:
         return float(token)
     except ValueError as exc:
@@ -31,7 +33,7 @@ def _coerce(token: str) -> float:
 
 
 def evaluate_prefix(tokens: Iterable[str]) -> float:
-    """Evaluate a prefix expression represented as tokens."""
+    """Nhận danh sách token prefix và trả về kết quả tính toán."""
     stack: List[float] = []
     for token in reversed(list(tokens)):
         if token in OPERATORS:
@@ -48,7 +50,7 @@ def evaluate_prefix(tokens: Iterable[str]) -> float:
 
 
 def evaluate_postfix(tokens: Iterable[str]) -> float:
-    """Evaluate a postfix expression represented as tokens."""
+    """Nhận danh sách token postfix và trả về kết quả tính toán."""
     stack: List[float] = []
     for token in tokens:
         if token in OPERATORS:
@@ -65,12 +67,12 @@ def evaluate_postfix(tokens: Iterable[str]) -> float:
 
 
 def evaluate_prefix_expression(expression: str) -> float:
-    """Evaluate a whitespace-delimited prefix string."""
+    """Tính giá trị chuỗi prefix (token phân tách bởi khoảng trắng)."""
     tokens = [token for token in expression.split() if token]
     return evaluate_prefix(tokens)
 
 
 def evaluate_postfix_expression(expression: str) -> float:
-    """Evaluate a whitespace-delimited postfix string."""
+    """Tính giá trị chuỗi postfix (token phân tách bởi khoảng trắng)."""
     tokens = [token for token in expression.split() if token]
     return evaluate_postfix(tokens)

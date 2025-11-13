@@ -1,3 +1,5 @@
+"""Bộ kiểm thử đảm bảo cây biểu thức hoạt động như mô tả trong đề bài."""
+
 import math
 import unittest
 
@@ -14,7 +16,10 @@ EXPRESSIONS = [
 
 
 class ExpressionTreeTests(unittest.TestCase):
+    """Nhóm test xác minh kết quả duyệt cây và tính toán."""
+
     def test_traversal_evaluations_match(self) -> None:
+        """Mỗi biểu thức mẫu phải cho cùng giá trị ở cả prefix và postfix."""
         for expression, expected in EXPRESSIONS:
             tree = build_expression_tree(expression)
             prefix_tokens = tree.preorder()
@@ -25,6 +30,7 @@ class ExpressionTreeTests(unittest.TestCase):
             self.assertTrue(math.isclose(postfix_value, expected))
 
     def test_zero_division_expression(self) -> None:
+        """Biểu thức chia cho 0 cần ném `ZeroDivisionError` để cảnh báo."""
         expression = "(1 + 2 * 3) : (4 - 5 - 6 +7)"
         tree = build_expression_tree(expression)
         with self.assertRaises(ZeroDivisionError):

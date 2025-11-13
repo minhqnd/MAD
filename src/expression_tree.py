@@ -1,4 +1,4 @@
-"""Expression tree creation and traversals for arithmetic formulas."""
+"""Xây dựng cây biểu thức và các phép duyệt cho các công thức số học."""
 
 from __future__ import annotations
 
@@ -13,24 +13,26 @@ PRECEDENCE = {"+": 1, "-": 1, "*": 2, ":": 2, "^": 3}
 
 @dataclass
 class Node:
-    """Single node inside an expression tree."""
+    """Đại diện cho một nút trong cây biểu thức (toán hạng hoặc toán tử)."""
 
     value: str
     left: Optional["Node"] = None
     right: Optional["Node"] = None
 
     def is_leaf(self) -> bool:
+        """Kiểm tra nút có phải lá (không có con trái/phải) hay không."""
         return self.left is None and self.right is None
 
 
 def _emit_number(buffer: List[str], tokens: List[str]) -> None:
+    """Đẩy chuỗi chữ số đang gom vào danh sách token rồi xóa bộ đệm."""
     if buffer:
         tokens.append("".join(buffer))
         buffer.clear()
 
 
 def tokenize(expression: str) -> List[str]:
-    """Convert an infix expression into discrete tokens."""
+    """Tách biểu thức infix thành danh sách token (số, toán tử, ngoặc)."""
     tokens: List[str] = []
     number_buffer: List[str] = []
     for char in expression:
@@ -51,6 +53,7 @@ def tokenize(expression: str) -> List[str]:
 
 
 def _is_operand(token: str) -> bool:
+    """Trả về True nếu token là toán hạng (số) hợp lệ."""
     if not token:
         return False
     if token in OPERATORS or token in {"(", ")"}:
@@ -59,7 +62,7 @@ def _is_operand(token: str) -> bool:
 
 
 def infix_to_postfix(tokens: Iterable[str]) -> List[str]:
-    """Convert a tokenized infix expression to postfix via the shunting-yard algorithm."""
+    """Chuyển biểu thức infix (đã tách token) sang postfix bằng giải thuật shunting-yard."""
     output: List[str] = []
     stack: List[str] = []
 
@@ -105,7 +108,7 @@ def infix_to_postfix(tokens: Iterable[str]) -> List[str]:
 
 
 def build_tree_from_postfix(tokens: Iterable[str]) -> Node:
-    """Build an expression tree from postfix tokens."""
+    """Dựng cây biểu thức từ chuỗi token postfix."""
     stack: List[Node] = []
     for token in tokens:
         if _is_operand(token):
@@ -125,11 +128,12 @@ def build_tree_from_postfix(tokens: Iterable[str]) -> Node:
 
 
 def build_expression_tree(expression: str) -> "ExpressionTree":
-    """Convenience helper to create a tree directly from an infix expression."""
+    """Hàm tiện ích: nhận biểu thức infix và trả về `ExpressionTree` tương ứng."""
     return ExpressionTree.from_infix(expression)
 
 
 def _pre_order(node: Optional[Node], acc: List[str]) -> None:
+    """Duyệt tiền tự (NLR) và ghi kết quả vào `acc`."""
     if not node:
         return
     acc.append(node.value)
@@ -138,6 +142,7 @@ def _pre_order(node: Optional[Node], acc: List[str]) -> None:
 
 
 def _in_order(node: Optional[Node], acc: List[str]) -> None:
+    """Duyệt trung tự (LNR) và ghi kết quả vào `acc`."""
     if not node:
         return
     _in_order(node.left, acc)
@@ -146,6 +151,7 @@ def _in_order(node: Optional[Node], acc: List[str]) -> None:
 
 
 def _post_order(node: Optional[Node], acc: List[str]) -> None:
+    """Duyệt hậu tự (LRN) và ghi kết quả vào `acc`."""
     if not node:
         return
     _post_order(node.left, acc)
@@ -153,8 +159,24 @@ def _post_order(node: Optional[Node], acc: List[str]) -> None:
     acc.append(node.value)
 
 
+def _render_ascii(node: Optional[Node], prefix: str, is_tail: bool, acc: List[str]) -> None:
+    """Đệ quy dựng từng dòng ASCII thể hiện quan hệ cha-con."""
+    if not node:
+        return
+    connector = "└── " if is_tail else "├── "
+    acc.append(f"{prefix}{connector}{node.value}")
+    children = []
+    if node.left:
+        children.append(node.left)
+    if node.right:
+        children.append(node.right)
+    for index, child in enumerate(children):
+        extension = "    " if is_tail else "│   "
+        _render_ascii(child, prefix + extension, index == len(children) - 1, acc)
+
+
 class ExpressionTree:
-    """High level wrapper around the raw tree that exposes traversals."""
+    """Bao bọc cây biểu thức và cung cấp các thao tác xây dựng + duyệt."""
 
     def __init__(self, root: Node, expression: str) -> None:
         self.root = root
@@ -162,22 +184,33 @@ class ExpressionTree:
 
     @classmethod
     def from_infix(cls, expression: str) -> "ExpressionTree":
+        """Khởi tạo cây trực tiếp từ biểu thức infix."""
         tokens = tokenize(expression)
         postfix = infix_to_postfix(tokens)
         root = build_tree_from_postfix(postfix)
         return cls(root=root, expression=expression)
 
     def preorder(self) -> List[str]:
+        """Trả về danh sách token theo thứ tự duyệt tiền tự."""
         result: List[str] = []
         _pre_order(self.root, result)
         return result
 
     def inorder(self) -> List[str]:
+        """Trả về danh sách token theo thứ tự duyệt trung tự."""
         result: List[str] = []
         _in_order(self.root, result)
         return result
 
     def postorder(self) -> List[str]:
+        """Trả về danh sách token theo thứ tự duyệt hậu tự."""
         result: List[str] = []
         _post_order(self.root, result)
         return result
+
+    def render_ascii(self) -> str:
+        """Trả về chuỗi ASCII mô tả cây theo dạng gạch kết nối."""
+        lines: List[str] = []
+        if self.root:
+            _render_ascii(self.root, "", True, lines)
+        return "\n".join(lines)
