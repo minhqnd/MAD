@@ -14,8 +14,8 @@ Video recording: một video ngắn khoảng 5-10 phút, thuyết minh quá trì
 Nộp bài qua link Google Form: https://forms.gle/vy3Aws6WprXrTMEG8
 Deadline: 23h59 ngày thứ 6, 14/11
 Công thức toán:
- (3^2 + 5) - 4 : 2
- ((3^2 + 5) - 4) : 2
- (1 + 2) * (3 + 4) + (5 * 6)
- 1 + (2 * 3) + (4 + 5) * 6
- (1 + 2 * 3) : (4 - 5 - 6 +7)
+(3^2 + 5) - 4 : 2
+((3^2 + 5) - 4) : 2
+(1 + 2) * (3 + 4) + (5 * 6)
+1 + (2 * 3) + (4 + 5) * 6
+(1 + 2 * 3) : (4 - 5 - 6 +7)

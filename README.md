@@ -1,8 +1,6 @@
 # Cây Biểu Thức (Expression Tree)
 
-Dự án này cung cấp một bộ công cụ dòng lệnh (CLI) để xây dựng, duyệt, và tính toán các cây biểu thức từ các công thức toán học dạng infix.
-
-Đây là bài làm cho yêu cầu được mô tả trong file `debai.txt`, bao gồm việc hiện thực cây biểu thức, các thuật toán duyệt cây (pre-order, in-order, post-order), chuyển đổi sang ký pháp prefix/postfix, và tính toán giá trị mà không sử dụng các thư viện cấu trúc dữ liệu có sẵn.
+Dự án này là công cụ dòng lệnh để xây dựng cây biểu thức từ biểu thức toán học dạng infix, hỗ trợ duyệt cây, chuyển đổi ký pháp prefix/postfix, và tính toán giá trị mà không dùng thư viện cấu trúc dữ liệu có sẵn.
 
 ## Tính năng
 
@@ -12,6 +10,10 @@ Dự án này cung cấp một bộ công cụ dòng lệnh (CLI) để xây d�
 - **Tính toán giá trị**: Tính toán kết quả của biểu thức từ dạng prefix và postfix.
 - **Trực quan hóa**: Hiển thị cấu trúc cây dưới dạng văn bản (ASCII art) để dễ dàng gỡ lỗi và kiểm tra.
 - **Giao diện dòng lệnh (CLI)**: Cho phép người dùng chạy các biểu thức mặc định hoặc cung cấp biểu thức tùy chỉnh.
+
+## Video Demo
+
+[Xem video demo](mad-pre.mp4)
 
 ## Cấu trúc dự án
 
@@ -26,13 +28,7 @@ Dự án này cung cấp một bộ công cụ dòng lệnh (CLI) để xây d�
 
 ## Hướng dẫn sử dụng
 
-1.  **Cài đặt môi trường ảo (khuyến khích):**
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate
-    ```
-
-2.  **Chạy chương trình:**
+1.  **Chạy chương trình:**
     - Để chạy với các biểu thức mặc định trong đề bài:
       ```bash
       python -m src.main
@@ -42,7 +38,7 @@ Dự án này cung cấp một bộ công cụ dòng lệnh (CLI) để xây d�
       python -m src.main --expr "(10 + 5) * 2" --expr "3^2 + 4"
       ```
 
-3.  **Chạy kiểm thử:**
+2.  **Chạy kiểm thử:**
     ```bash
     python -m unittest
     ```
